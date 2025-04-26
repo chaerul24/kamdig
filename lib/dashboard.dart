@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter_image_slideshow/flutter_image_slideshow.dart';
 import 'package:intl/intl.dart';
 import 'package:intl/date_symbol_data_local.dart';
+import 'package:kamdig/news.dart';
 
 Future<void> main() async {
   WidgetsFlutterBinding.ensureInitialized();
@@ -26,8 +27,20 @@ class DashboardApp extends StatelessWidget {
   }
 }
 
-class DashboardPage extends StatelessWidget {
+class DashboardPage extends StatefulWidget {
   const DashboardPage({super.key});
+
+  @override
+  State<DashboardPage> createState() => _DashboardPageState();
+}
+
+class _DashboardPageState extends State<DashboardPage> {
+  final ScrollController _scrollController = ScrollController();
+  @override
+  void dispose() {
+    _scrollController.dispose(); // selalu dibuang yaa biar ga bocor
+    super.dispose();
+  }
 
   @override
   Widget build(BuildContext context) {
@@ -83,340 +96,193 @@ class DashboardPage extends StatelessWidget {
       },
     ];
 
-    final List<Map<String, dynamic>> newsItems = [
-      {
-        'title':
-            'Banjir melanda di brebes, hujan yang deras mengakibatkan banjir',
-        'image':
-            'https://jatengkita.id/wp-content/uploads/2025/01/WhatsApp-Image-2025-01-20-at-15.56.55-2.jpeg',
-        'create_at': '2023-10-01',
-        'comment': '1k',
-        'views': '1.2k',
-      },
-      {
-        'title':
-            'Diterjang Hujan Deras, Bupati Brebes Tinjau Lokasi Tanah Bergerak di Sirampog',
-        'image':
-            'https://static.promediateknologi.id/crop/0x712:1076x1538/750x500/webp/photo/p1/08/2025/04/19/Screenshot_2025-04-19-12-02-52-31_40deb401b9ffe8e1df2f1cc5ba480b12-4128421802.jpg',
-        'create_at': '2023-10-01',
-        'comment': '1k',
-        'views': '1.2k',
-      },
-    ];
-
     return Scaffold(
-      appBar: AppBar(
-        backgroundColor: Colors.transparent,
-        elevation: 0,
-        title: Row(
-          children: [
-            Image.asset('assets/images/icon.png', height: 40),
-            const SizedBox(width: 10),
-            const Text(
-              'Kampung Digital',
-              style: TextStyle(fontWeight: FontWeight.bold, fontSize: 20),
-            ),
-          ],
-        ),
-        actions: [
-          IconButton(
-            icon: const Icon(Icons.notifications, color: Colors.black),
-            onPressed: () {
-              ScaffoldMessenger.of(context).showSnackBar(
-                const SnackBar(content: Text('Belum ada notifikasi 😴')),
-              );
-            },
-          ),
-        ],
-      ),
+      backgroundColor: Colors.white,
+      // appBar: AppBar(
+      //   backgroundColor: Colors.transparent,
+      //   elevation: 0,
+      //   title: Row(
+      //     children: [
+      //       Image.asset('assets/images/icon.png', height: 40),
+      //       const SizedBox(width: 10),
+      //       const Text(
+      //         'Kampung Digital',
+      //         style: TextStyle(fontWeight: FontWeight.bold, fontSize: 20),
+      //       ),
+      //     ],
+      //   ),
+      //   actions: [
+      //     IconButton(
+      //       icon: const Icon(Icons.notifications, color: Colors.black),
+      //       onPressed: () {
+      //         ScaffoldMessenger.of(context).showSnackBar(
+      //           const SnackBar(content: Text('Belum ada notifikasi 😴')),
+      //         );
+      //       },
+      //     ),
+      //   ],
+      // ),
       body: Padding(
         padding: const EdgeInsets.only(left: 16, right: 16, top: 0),
         child: SingleChildScrollView(
-          child: Column(
-            crossAxisAlignment: CrossAxisAlignment.start,
-            mainAxisAlignment: MainAxisAlignment.start,
-            children: [
-              SizedBox(height: 20),
-              GridView.builder(
-                shrinkWrap: true,
-                itemCount: data.length,
-                gridDelegate: const SliverGridDelegateWithFixedCrossAxisCount(
-                  crossAxisCount: 3, // 2 kolom
-                  mainAxisSpacing: 16,
-                  crossAxisSpacing: 16,
-                  childAspectRatio: 1,
-                ),
-                itemBuilder: (context, index) {
-                  final item = data[index];
-                  return GestureDetector(
-                    onTap: () {
-                      ScaffoldMessenger.of(context).showSnackBar(
-                        SnackBar(content: Text('${item['title']} diklik')),
-                      );
-                    },
-                    child: Container(
-                      decoration: BoxDecoration(
-                        color: item['color'],
-                        borderRadius: BorderRadius.circular(12),
-                      ),
-                      child: Column(
-                        mainAxisAlignment: MainAxisAlignment.center,
-                        crossAxisAlignment: CrossAxisAlignment.center,
-                        children: [
-                          Image.asset(item['icon'], width: 30, height: 30),
-                          const SizedBox(height: 10),
-                          Text(
-                            item['title'],
-                            style: const TextStyle(
-                              fontWeight: FontWeight.bold,
-                              fontSize: 12,
-                            ),
-                            textAlign: TextAlign.center,
-                          ),
-                        ],
-                      ),
-                    ),
-                  );
-                },
-              ),
-              SizedBox(height: 30),
-              Container(
-                decoration: BoxDecoration(
-                  border: Border.all(
-                    color: const Color.fromARGB(255, 255, 84, 4),
-                    width: 2,
-                  ), // Mengatur warna dan ketebalan border
-                  borderRadius: BorderRadius.circular(
-                    8,
-                  ), // Jika ingin memberi sudut melengkung
-                ),
-                child: Padding(
-                  padding: const EdgeInsets.all(10.0),
-                  child: Column(
-                    mainAxisAlignment: MainAxisAlignment.center,
-                    children: [
-                      Row(
-                        mainAxisAlignment: MainAxisAlignment.start,
-                        crossAxisAlignment: CrossAxisAlignment.start,
-                        children: [
-                          Icon(
-                            Icons.warning,
-                            color: const Color.fromARGB(255, 255, 84, 4),
-                            size: 30,
-                          ),
-                          SizedBox(width: 20),
-                          Expanded(
-                            child: const Text(
-                              'Anda memiliki tunggakan yang belum di bayar sebesar Rp 50.000 segera membayar agar akun anda tidak di nonaktifkan.',
-                              style: TextStyle(
-                                fontSize: 13,
-                                color: Color.fromARGB(255, 125, 126, 126),
-                              ),
-                            ),
-                          ),
-                        ],
-                      ),
-                    ],
+          child: SingleChildScrollView(
+            controller: _scrollController,
+            child: Column(
+              crossAxisAlignment: CrossAxisAlignment.start,
+              mainAxisAlignment: MainAxisAlignment.start,
+              children: [
+                SizedBox(height: 20),
+                GridView.builder(
+                  shrinkWrap: true,
+                  itemCount: data.length,
+                  gridDelegate: const SliverGridDelegateWithFixedCrossAxisCount(
+                    crossAxisCount: 3, // 2 kolom
+                    mainAxisSpacing: 16,
+                    crossAxisSpacing: 16,
+                    childAspectRatio: 1,
                   ),
-                ),
-              ),
-              const SizedBox(height: 20),
-              ImageSlideshow(
-                width: double.infinity,
-                height: 200,
-                initialPage: 0,
-                indicatorColor: Colors.blue,
-                indicatorBackgroundColor: Colors.grey,
-                autoPlayInterval: 3000,
-                isLoop: true,
-                children:
-                    carouselItems.map((item) {
-                      return ClipRRect(
-                        borderRadius: BorderRadius.circular(12),
-                        child: Stack(
+                  itemBuilder: (context, index) {
+                    final item = data[index];
+                    return GestureDetector(
+                      onTap: () {
+                        ScaffoldMessenger.of(context).showSnackBar(
+                          SnackBar(content: Text('${item['title']} diklik')),
+                        );
+                      },
+                      child: Container(
+                        decoration: BoxDecoration(
+                          color: item['color'],
+                          borderRadius: BorderRadius.circular(12),
+                        ),
+                        child: Column(
+                          mainAxisAlignment: MainAxisAlignment.center,
+                          crossAxisAlignment: CrossAxisAlignment.center,
                           children: [
-                            Image.network(
-                              item['image'],
-                              fit: BoxFit.cover,
-                              width: double.infinity,
-                              height: 200,
+                            Image.asset(item['icon'], width: 30, height: 30),
+                            const SizedBox(height: 10),
+                            Text(
+                              item['title'],
+                              style: const TextStyle(
+                                fontWeight: FontWeight.bold,
+                                fontSize: 12,
+                              ),
+                              textAlign: TextAlign.center,
                             ),
-                            Positioned(
-                              bottom: 10,
-                              left: 10,
-                              child: Container(
-                                padding: const EdgeInsets.all(8),
-                                // color: Colors.black.withOpacity(0.5),
-                                child: Container(
-                                  constraints: BoxConstraints(maxWidth: 200),
-                                  child: Column(
-                                    crossAxisAlignment:
-                                        CrossAxisAlignment.start,
-                                    mainAxisAlignment: MainAxisAlignment.start,
-                                    children: [
-                                      Text(
-                                        DateFormat("dd MMMM yyyy").format(
-                                          DateTime.parse(item['create_at']),
-                                        ),
-                                        style: const TextStyle(
-                                          color: Colors.white,
-                                          fontWeight: FontWeight.bold,
-                                        ),
-                                      ),
-
-                                      Text(
-                                        item['title'],
-                                        maxLines: 2,
-                                        overflow: TextOverflow.ellipsis,
-                                        style: const TextStyle(
-                                          color: Colors.white,
-                                          fontWeight: FontWeight.bold,
-                                          fontSize: 20,
-                                        ),
-                                      ),
-                                    ],
-                                  ),
+                          ],
+                        ),
+                      ),
+                    );
+                  },
+                ),
+                SizedBox(height: 30),
+                Container(
+                  decoration: BoxDecoration(
+                    border: Border.all(
+                      color: const Color.fromARGB(255, 255, 84, 4),
+                      width: 2,
+                    ), // Mengatur warna dan ketebalan border
+                    borderRadius: BorderRadius.circular(
+                      8,
+                    ), // Jika ingin memberi sudut melengkung
+                  ),
+                  child: Padding(
+                    padding: const EdgeInsets.all(10.0),
+                    child: Column(
+                      mainAxisAlignment: MainAxisAlignment.center,
+                      children: [
+                        Row(
+                          mainAxisAlignment: MainAxisAlignment.start,
+                          crossAxisAlignment: CrossAxisAlignment.start,
+                          children: [
+                            Icon(
+                              Icons.warning,
+                              color: const Color.fromARGB(255, 255, 84, 4),
+                              size: 30,
+                            ),
+                            SizedBox(width: 20),
+                            Expanded(
+                              child: const Text(
+                                'Anda memiliki tunggakan yang belum di bayar sebesar Rp 50.000 segera membayar agar akun anda tidak di nonaktifkan.',
+                                style: TextStyle(
+                                  fontSize: 13,
+                                  color: Color.fromARGB(255, 125, 126, 126),
                                 ),
                               ),
                             ),
                           ],
                         ),
-                      );
-                    }).toList(),
-              ),
-              const SizedBox(height: 20),
-              const Text(
-                'Berita Terbaru',
-                style: TextStyle(fontSize: 18, fontWeight: FontWeight.bold),
-              ),
-
-              SizedBox(height: 20),
-
-              GridView.builder(
-                shrinkWrap: true,
-                physics:
-                    NeverScrollableScrollPhysics(), // biar scroll pakai parent
-                itemCount: newsItems.length,
-                gridDelegate: SliverGridDelegateWithFixedCrossAxisCount(
-                  crossAxisCount: 1,
-                  mainAxisSpacing: 20,
-                  crossAxisSpacing: 0,
-                  childAspectRatio: 3, // ini ngatur tinggi-kotaknya
+                      ],
+                    ),
+                  ),
                 ),
-                itemBuilder: (context, index) {
-                  final item = newsItems[index];
-                  return GestureDetector(
-                    onTap: () {
-                      ScaffoldMessenger.of(context).showSnackBar(
-                        SnackBar(content: Text('${item['title']} diklik')),
-                      );
-                    },
-                    child: Container(
-                      width: double.infinity,
-                      decoration: BoxDecoration(
-                        borderRadius: BorderRadius.circular(12),
-                      ),
-                      child: Row(
-                        crossAxisAlignment: CrossAxisAlignment.start,
-                        mainAxisAlignment: MainAxisAlignment.start,
-                        children: [
-                          Container(
-                            decoration: BoxDecoration(
-                              shape: BoxShape.circle,
-                              color: item['color'],
-                            ),
-                            child: ClipRRect(
-                              borderRadius: BorderRadius.circular(12),
-                              child: Image.network(
+                const SizedBox(height: 20),
+                ImageSlideshow(
+                  width: double.infinity,
+                  height: 200,
+                  initialPage: 0,
+                  indicatorColor: Colors.blue,
+                  indicatorBackgroundColor: Colors.grey,
+                  autoPlayInterval: 3000,
+                  isLoop: true,
+                  children:
+                      carouselItems.map((item) {
+                        return ClipRRect(
+                          borderRadius: BorderRadius.circular(12),
+                          child: Stack(
+                            children: [
+                              Image.network(
                                 item['image'],
-                                width: 100,
-                                height: 150,
                                 fit: BoxFit.cover,
-                                errorBuilder:
-                                    (context, error, stackTrace) =>
-                                        const Icon(Icons.error),
+                                width: double.infinity,
+                                height: 200,
                               ),
-                            ),
-                          ),
-                          const SizedBox(width: 16),
-
-                          Expanded(
-                            child: Stack(
-                              children: [
-                                // Kolom teks
-                                Column(
-                                  crossAxisAlignment: CrossAxisAlignment.start,
-                                  mainAxisAlignment: MainAxisAlignment.start,
-                                  children: [
-                                    Text(
-                                      DateFormat("dd MMMM yyyy").format(
-                                        DateTime.parse(item['create_at']),
-                                      ),
-                                      style: const TextStyle(
-                                        fontSize: 12,
-                                        color: Colors.grey,
-                                      ),
-                                    ),
-                                    const SizedBox(height: 5),
-                                    Text(
-                                      item['title'],
-                                      maxLines: 2,
-                                      overflow: TextOverflow.ellipsis,
-                                      style: const TextStyle(
-                                        fontWeight: FontWeight.bold,
-                                        fontSize: 15,
-                                      ),
-                                    ),
-                                  ],
-                                ),
-
-                                Positioned(
-                                  right: 0,
-                                  bottom: 0,
-                                  child: Row(
-                                    children: [
-                                      Text(
-                                        '${item['comment']}',
-                                        style: const TextStyle(
-                                          color: Colors.grey,
-                                          fontSize: 12,
+                              Positioned(
+                                bottom: 10,
+                                left: 10,
+                                child: Container(
+                                  padding: const EdgeInsets.all(8),
+                                  // color: Colors.black.withOpacity(0.5),
+                                  child: Container(
+                                    constraints: BoxConstraints(maxWidth: 200),
+                                    child: Column(
+                                      crossAxisAlignment:
+                                          CrossAxisAlignment.start,
+                                      mainAxisAlignment:
+                                          MainAxisAlignment.start,
+                                      children: [
+                                        Text(
+                                          DateFormat("dd MMMM yyyy").format(
+                                            DateTime.parse(item['create_at']),
+                                          ),
+                                          style: const TextStyle(
+                                            color: Colors.white,
+                                            fontWeight: FontWeight.bold,
+                                          ),
                                         ),
-                                      ),
-                                      SizedBox(width: 5),
-                                      const Icon(
-                                        Icons.comment,
-                                        size: 16,
-                                        color: Colors.grey,
-                                      ),
 
-                                      SizedBox(width: 5),
-
-                                      Text(
-                                        item['views'],
-                                        style: TextStyle(
-                                          color: Colors.grey,
-                                          fontSize: 12,
+                                        Text(
+                                          item['title'],
+                                          maxLines: 2,
+                                          overflow: TextOverflow.ellipsis,
+                                          style: const TextStyle(
+                                            color: Colors.white,
+                                            fontWeight: FontWeight.bold,
+                                            fontSize: 20,
+                                          ),
                                         ),
-                                      ),
-                                      SizedBox(width: 5),
-                                      const Icon(
-                                        Icons.remove_red_eye,
-                                        size: 16,
-                                        color: Colors.grey,
-                                      ),
-                                    ],
+                                      ],
+                                    ),
                                   ),
                                 ),
-                              ],
-                            ),
+                              ),
+                            ],
                           ),
-                        ],
-                      ),
-                    ),
-                  );
-                },
-              ),
-            ],
+                        );
+                      }).toList(),
+                ),
+                NewsWidget(),
+              ],
+            ),
           ),
         ),
       ),

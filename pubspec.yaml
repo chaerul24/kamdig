@@ -31,7 +31,9 @@ dependencies:
   flutter:
     sdk: flutter
   flutter_image_slideshow: ^0.1.4
-
+  shimmer: ^2.0.0
+  http: ^0.13.6
+  camera: ^0.10.0+4
   # The following adds the Cupertino Icons font to your application.
   # Use with the CupertinoIcons class for iOS style icons.
   cupertino_icons: ^1.0.8
@@ -40,6 +42,8 @@ dependencies:
 dev_dependencies:
   flutter_test:
     sdk: flutter
+
+
 
   # The "flutter_lints" package below contains a set of recommended lints to
   # encourage good coding practices. The lint set provided by the package is
@@ -71,6 +75,8 @@ flutter:
     - assets/images/ic_panic.png
     - assets/images/ic_user.png
     - assets/images/ic_wallet.png
+    - assets/images/ic_wallet_black.png
+    - assets/images/ktp.png
 
   # An image asset can refer to one or more resolution-specific "variants", see
   # https://flutter.dev/to/resolution-aware-images

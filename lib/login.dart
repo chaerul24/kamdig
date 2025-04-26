@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:kamdig/ViewPagerFragmentStylePage.dart';
-import 'package:kamdig/dashboard.dart';
+import 'package:kamdig/register.dart';
+import 'package:kamdig/serve/HttpConnectApi.dart';
 
 void main() {
   runApp(const LoginApp());
@@ -20,8 +21,72 @@ class LoginApp extends StatelessWidget {
   }
 }
 
-class LoginPage extends StatelessWidget {
+class LoginPage extends StatefulWidget {
   const LoginPage({super.key});
+
+  @override
+  State<LoginPage> createState() => _LoginPageState();
+}
+
+class _LoginPageState extends State<LoginPage> {
+  final usernameController = TextEditingController();
+  final passwordController = TextEditingController();
+  final Httpconnectapi _httpConnectApi = Httpconnectapi();
+
+  bool isLoading = false;
+
+  void _login() async {
+    setState(() => isLoading = true);
+
+    final data = {
+      'username': usernameController.text.trim(),
+      'password': passwordController.text,
+    };
+
+    try {
+      final response = await _httpConnectApi.postFormData('app/login', data);
+
+      setState(() => isLoading = false);
+
+      if (response['status'] == 'success') {
+        final token = response['token'];
+        final user = response['user'];
+        print('JWT Token: $token');
+        print('User: $user');
+        ScaffoldMessenger.of(context).showSnackBar(
+          SnackBar(
+            content: Text('Login berhasil!'),
+            backgroundColor: Colors.green,
+          ),
+        );
+        // Navigasi ke halaman berikutnya setelah login berhasil
+        Navigator.pushReplacement(
+          context,
+          MaterialPageRoute(
+            builder: (context) => const ViewPagerFragmentStylePage(),
+          ),
+        );
+      } else {
+        // Jika ada error dari server, tampilkan pesan error
+        print('Error Response: ${response['message']}'); // Log error response
+        ScaffoldMessenger.of(context).showSnackBar(
+          SnackBar(
+            content: Text(response['message'] ?? 'Login gagal'),
+            backgroundColor: Colors.red,
+          ),
+        );
+      }
+    } catch (e) {
+      setState(() => isLoading = false);
+      print('Error during POST request: $e'); // Log error detail di sini
+      ScaffoldMessenger.of(context).showSnackBar(
+        SnackBar(
+          content: Text('Terjadi kesalahan: ${e.toString()}'),
+          backgroundColor: Colors.red,
+        ),
+      );
+    }
+  }
 
   @override
   Widget build(BuildContext context) {
@@ -42,14 +107,15 @@ class LoginPage extends StatelessWidget {
                 ),
                 const SizedBox(height: 40),
 
-                // Email
+                // Username
                 Container(
-                  margin: const EdgeInsets.only(left: 20, right: 20),
+                  margin: const EdgeInsets.symmetric(horizontal: 20),
                   height: 45,
                   child: TextField(
+                    controller: usernameController,
                     decoration: InputDecoration(
                       labelText: 'Username',
-                      prefixIcon: Icon(Icons.person), // Icon di kiri
+                      prefixIcon: Icon(Icons.person),
                       border: OutlineInputBorder(
                         borderRadius: BorderRadius.circular(12),
                       ),
@@ -61,91 +127,96 @@ class LoginPage extends StatelessWidget {
 
                 // Password
                 Container(
-                  margin: const EdgeInsets.only(left: 20, right: 20),
+                  margin: const EdgeInsets.symmetric(horizontal: 20),
                   height: 45,
                   child: TextField(
+                    controller: passwordController,
+                    obscureText: true,
                     decoration: InputDecoration(
-                      labelText: 'password',
-                      prefixIcon: Icon(Icons.lock), // Icon di kiri
+                      labelText: 'Password',
+                      prefixIcon: Icon(Icons.lock),
                       border: OutlineInputBorder(
                         borderRadius: BorderRadius.circular(12),
                       ),
                     ),
                   ),
                 ),
+
                 const SizedBox(height: 30),
 
                 // Tombol Login
                 Container(
                   width: double.infinity,
                   height: 40,
-                  margin: const EdgeInsets.only(left: 20, right: 20),
+                  margin: const EdgeInsets.symmetric(horizontal: 20),
                   child: ElevatedButton(
-                    onPressed: () {
-                      Navigator.push(
-                        context,
-                        MaterialPageRoute(
-                          builder:
-                              (context) => const ViewPagerFragmentStylePage(),
-                        ),
-                      );
-                    },
+                    onPressed: isLoading ? null : _login,
                     style: ElevatedButton.styleFrom(
                       backgroundColor: Colors.blue,
                       shape: RoundedRectangleBorder(
                         borderRadius: BorderRadius.circular(12),
                       ),
                     ),
-                    child: const Text(
-                      'Login',
-                      style: TextStyle(
-                        fontSize: 18,
-                        fontWeight: FontWeight.bold,
-                        color: Colors.white,
-                      ),
-                    ),
+                    child:
+                        isLoading
+                            ? const CircularProgressIndicator(
+                              color: Colors.white,
+                            )
+                            : const Text(
+                              'Login',
+                              style: TextStyle(
+                                fontSize: 18,
+                                fontWeight: FontWeight.bold,
+                                color: Colors.white,
+                              ),
+                            ),
                   ),
                 ),
-                SizedBox(height: 30),
-                Container(
-                  margin: const EdgeInsets.only(left: 20, right: 20),
-                  decoration: BoxDecoration(
-                    border: Border.all(
-                      color: const Color.fromARGB(255, 125, 126, 126),
-                      width: 2,
-                    ), // Mengatur warna dan ketebalan border
-                    borderRadius: BorderRadius.circular(
-                      8,
-                    ), // Jika ingin memberi sudut melengkung
-                  ),
-                  child: Padding(
-                    padding: const EdgeInsets.all(10.0),
-                    child: Column(
-                      mainAxisAlignment: MainAxisAlignment.center,
-                      children: [
-                        Column(
-                          mainAxisAlignment: MainAxisAlignment.start,
-                          crossAxisAlignment: CrossAxisAlignment.start,
-                          children: [
-                            const Text(
-                              'Aplikasi ini hanya bisa diakses sama kampung yang sudah bekerja sama dengan kampung digital, Jika Kampung anda belum bekerja sama silahkan klik Free Trial',
-                              style: TextStyle(
-                                fontSize: 13,
-                                color: Color.fromARGB(255, 125, 126, 126),
-                              ),
+
+                const SizedBox(height: 30),
+
+                GestureDetector(
+                  onTap: () {
+                    Navigator.push(
+                      context,
+                      MaterialPageRoute(
+                        builder:
+                            (context) => const RegisterApp(imagePath: 'null'),
+                      ),
+                    );
+                  },
+                  child: Container(
+                    margin: const EdgeInsets.symmetric(horizontal: 20),
+                    decoration: BoxDecoration(
+                      border: Border.all(
+                        color: Color.fromARGB(255, 125, 126, 126),
+                        width: 2,
+                      ),
+                      borderRadius: BorderRadius.circular(8),
+                    ),
+                    child: Padding(
+                      padding: const EdgeInsets.all(10.0),
+                      child: Column(
+                        crossAxisAlignment: CrossAxisAlignment.start,
+                        children: const [
+                          Text(
+                            'Aplikasi ini hanya bisa diakses sama kampung yang sudah bekerja sama dengan kampung digital. Jika Kampung anda belum bekerja sama silahkan klik Free Trial',
+                            style: TextStyle(
+                              fontSize: 13,
+                              color: Color.fromARGB(255, 125, 126, 126),
                             ),
-                            SizedBox(height: 10),
-                            const Text(
-                              'Free Trial',
-                              style: TextStyle(
-                                fontSize: 16,
-                                color: Color.fromARGB(255, 2, 98, 224),
-                                fontWeight: FontWeight.bold,
-                              ),
+                          ),
+                          SizedBox(height: 10),
+                          Text(
+                            'Free Trial',
+                            style: TextStyle(
+                              fontSize: 16,
+                              color: Color.fromARGB(255, 2, 98, 224),
+                              fontWeight: FontWeight.bold,
                             ),
-                          ],
-                        ),
-                      ],
+                          ),
+                        ],
+                      ),
                     ),
                   ),
                 ),
@@ -153,10 +224,7 @@ class LoginPage extends StatelessWidget {
                 const SizedBox(height: 20),
 
                 Column(
-                  mainAxisAlignment: MainAxisAlignment.center,
-                  crossAxisAlignment: CrossAxisAlignment.center,
                   children: [
-                    const SizedBox(height: 10),
                     const Text(
                       'Hubungi Kami di :',
                       style: TextStyle(
@@ -165,11 +233,9 @@ class LoginPage extends StatelessWidget {
                         fontWeight: FontWeight.bold,
                       ),
                     ),
-
                     const SizedBox(height: 10),
                     Row(
                       mainAxisAlignment: MainAxisAlignment.center,
-                      crossAxisAlignment: CrossAxisAlignment.center,
                       children: [
                         Image.asset(
                           'assets/images/ic_whatsapp.png',

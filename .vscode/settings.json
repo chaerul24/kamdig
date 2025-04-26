@@ -1,5 +1,6 @@
 {
     "sweetpad.build.xcodeWorkspacePath": "ios\\Runner.xcodeproj\\project.xcworkspace",
     "debug.enableStatusBarColor": false,
-    "cmake.ignoreCMakeListsMissing": true
+    "cmake.ignoreCMakeListsMissing": true,
+    "java.configuration.updateBuildConfiguration": "interactive"
 }
