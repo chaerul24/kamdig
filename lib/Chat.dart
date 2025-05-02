@@ -1,52 +1,53 @@
 import 'package:flutter/material.dart';
+import 'package:flutter_image_slideshow/flutter_image_slideshow.dart';
+import 'package:intl/intl.dart';
+import 'package:intl/date_symbol_data_local.dart';
+import 'package:kamdig/Balance.dart';
 import 'package:kamdig/OpenChat.dart';
+import 'package:kamdig/Works.dart';
+import 'package:kamdig/news.dart';
 
-void main() {
-  runApp(const ChatPage());
+Future<void> main() async {
+  WidgetsFlutterBinding.ensureInitialized();
+  await initializeDateFormatting('id_ID', null);
+  runApp(const ChatApp());
 }
 
-class ChatPage extends StatelessWidget {
-  const ChatPage({super.key});
+class ChatApp extends StatelessWidget {
+  const ChatApp({super.key});
 
   @override
   Widget build(BuildContext context) {
     return MaterialApp(
-      title: 'Kamdig',
-      theme: ThemeData(primarySwatch: Colors.blue),
-      home: const ChatPageView(),
+      title: 'Dashboard',
+      theme: ThemeData(
+        primarySwatch: Colors.blue,
+        primaryColor: Color.fromARGB(255, 0, 140, 255),
+      ),
+      home: ChatPage(),
       debugShowCheckedModeBanner: false,
     );
   }
 }
 
-class ChatPageView extends StatefulWidget {
-  const ChatPageView({super.key});
+class ChatPage extends StatefulWidget {
+  const ChatPage({super.key});
 
   @override
-  State<ChatPageView> createState() => ChatPageViewState();
+  State<ChatPage> createState() => _ChatPageState();
 }
 
-class ChatPageViewState extends State<ChatPageView> {
+class _ChatPageState extends State<ChatPage> {
   final TextEditingController _searchController = TextEditingController();
 
-  final List<Map<String, dynamic>> userChat = [
+  List<Map<String, dynamic>> _chatList = [
     {
-      'username': 'James',
-      'avatar': 'https://avatars.githubusercontent.com/u/160778594?v=4',
-      'status': 'online',
+      'username': 'Chaerul',
       'message': 'Halo, apa kabar?',
+      'time': '10:30',
       'read': true,
-      'time': '10:00 AM',
-      'email': 'james@gmail.com',
-    },
-    {
-      'username': 'Jhon',
-      'avatar': 'https://avatars.githubusercontent.com/u/136873290?v=4',
       'status': 'online',
-      'message': 'Selamat malam, Chaerul',
-      'read': false,
-      'time': '10:00 AM',
-      'email': 'james@gmail.com',
+      'avatar': 'https://avatars.githubusercontent.com/u/160778594?v=4',
     },
   ];
 
@@ -55,26 +56,34 @@ class ChatPageViewState extends State<ChatPageView> {
   @override
   void initState() {
     super.initState();
-    _filteredChat = userChat;
+    _filteredChat = List.from(_chatList);
   }
 
   void _filterChat(String keyword) {
-    setState(() {
+    if (keyword.isEmpty) {
+      _filteredChat = List.from(_chatList);
+    } else {
       _filteredChat =
-          userChat.where((chat) {
-            final username = chat['username'].toString().toLowerCase();
-            final message = chat['message'].toString().toLowerCase();
-            return username.contains(keyword.toLowerCase()) ||
-                message.contains(keyword.toLowerCase());
-          }).toList();
-    });
+          _chatList
+              .where(
+                (chat) =>
+                    chat['username'].toLowerCase().contains(
+                      keyword.toLowerCase(),
+                    ) ||
+                    chat['message'].toLowerCase().contains(
+                      keyword.toLowerCase(),
+                    ),
+              )
+              .toList();
+    }
   }
 
   Future<void> _refreshChat() async {
     await Future.delayed(const Duration(seconds: 1));
+    // Simulasikan pembaruan data
     setState(() {
-      _filteredChat = userChat;
-      _searchController.clear();
+      _chatList.shuffle(); // contoh: urutkan acak untuk efek refresh
+      _filteredChat = List.from(_chatList);
     });
   }
 
@@ -82,9 +91,9 @@ class ChatPageViewState extends State<ChatPageView> {
   Widget build(BuildContext context) {
     return Scaffold(
       backgroundColor: Colors.white,
+
       body: Column(
         children: [
-          // Search bar
           Padding(
             padding: const EdgeInsets.only(left: 20, right: 20, top: 10),
             child: SizedBox(
@@ -173,12 +182,11 @@ class ChatPageViewState extends State<ChatPageView> {
                       ),
                       onTap: () {
                         // Aksi saat item diklik, misalnya buka chat dengan user
-                        Navigator.pushAndRemoveUntil(
+                        Navigator.push(
                           context,
                           MaterialPageRoute(
-                            builder: (context) => OpenchatPageView(),
+                            builder: (context) => OpenchatPage(),
                           ),
-                          (route) => false,
                         );
                       },
                     );

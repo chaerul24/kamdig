@@ -1,12 +1,9 @@
 import 'package:flutter/material.dart';
 import 'package:intl/date_symbol_data_local.dart';
 import 'package:kamdig/Chat.dart';
+import 'package:kamdig/Notification.dart';
 import 'package:kamdig/Profile.dart';
-import 'package:flutter_image_slideshow/flutter_image_slideshow.dart';
-import 'package:intl/intl.dart';
-import 'package:intl/date_symbol_data_local.dart';
 import 'package:kamdig/dashboard.dart';
-import 'package:kamdig/news.dart';
 
 ///
 Future<void> main() async {
@@ -26,17 +23,103 @@ class ViewPagerFragmentStylePage extends StatefulWidget {
 class _ViewPagerFragmentStylePageState extends State<ViewPagerFragmentStylePage>
     with SingleTickerProviderStateMixin {
   int _selectedIndex = 0;
-  /*************  ✨ Windsurf Command ⭐  *************/
-  /// Creates the state of the ViewPagerFragmentStylePage widget.
-  ///
-  /// This function is invoked by the framework when the
-  /// ViewPagerFragmentStylePage widget is inserted into the tree. It
-  /// returns an instance of `_ViewPagerFragmentStylePageState`, which
-  /// is the state of the ViewPagerFragmentStylePage.
-  /*******  7f99568c-a08e-40ca-bc27-33b330fce578  *******/
   final PageController _pageController = PageController();
   late AnimationController _animationController;
   late Animation<double> _appBarOpacity;
+  void showModernInputSheet() {
+    final TextEditingController nameController = TextEditingController();
+    final TextEditingController emailController = TextEditingController();
+
+    showModalBottomSheet(
+      context: context,
+      isScrollControlled: true,
+      shape: const RoundedRectangleBorder(
+        borderRadius: BorderRadius.vertical(top: Radius.circular(25)),
+      ),
+      builder: (context) {
+        return Padding(
+          padding: EdgeInsets.only(
+            bottom: MediaQuery.of(context).viewInsets.bottom,
+            top: 16,
+            left: 24,
+            right: 24,
+          ),
+          child: Column(
+            mainAxisSize: MainAxisSize.min,
+            children: [
+              // Bar penanda bisa ditarik
+              Container(
+                width: 50,
+                height: 5,
+                decoration: BoxDecoration(
+                  color: Colors.grey[300],
+                  borderRadius: BorderRadius.circular(10),
+                ),
+              ),
+              const SizedBox(height: 16),
+              Row(
+                mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                children: [
+                  const Text(
+                    'Isi Data Pengguna',
+                    style: TextStyle(fontSize: 18, fontWeight: FontWeight.bold),
+                  ),
+                  IconButton(
+                    icon: const Icon(Icons.close),
+                    onPressed: () => Navigator.pop(context),
+                  ),
+                ],
+              ),
+              const SizedBox(height: 8),
+              TextField(
+                controller: nameController,
+                decoration: InputDecoration(
+                  labelText: 'Nama',
+                  border: OutlineInputBorder(
+                    borderRadius: BorderRadius.circular(12),
+                  ),
+                  prefixIcon: const Icon(Icons.person),
+                ),
+              ),
+              const SizedBox(height: 12),
+              TextField(
+                controller: emailController,
+                decoration: InputDecoration(
+                  labelText: 'Email',
+                  border: OutlineInputBorder(
+                    borderRadius: BorderRadius.circular(12),
+                  ),
+                  prefixIcon: const Icon(Icons.email),
+                ),
+                keyboardType: TextInputType.emailAddress,
+              ),
+              const SizedBox(height: 20),
+              ElevatedButton.icon(
+                icon: const Icon(Icons.save),
+                label: const Text('Simpan'),
+                style: ElevatedButton.styleFrom(
+                  backgroundColor: Colors.blueAccent,
+                  minimumSize: const Size.fromHeight(50),
+                  shape: RoundedRectangleBorder(
+                    borderRadius: BorderRadius.circular(12),
+                  ),
+                ),
+                onPressed: () {
+                  final nama = nameController.text;
+                  final email = emailController.text;
+                  Navigator.pop(context);
+                  ScaffoldMessenger.of(context).showSnackBar(
+                    SnackBar(content: Text('Tersimpan: $nama ($email)')),
+                  );
+                },
+              ),
+              const SizedBox(height: 20),
+            ],
+          ),
+        );
+      },
+    );
+  }
 
   List<Widget> get _pages => [DashboardPage(), ChatPage(), Profile()];
 
@@ -133,11 +216,14 @@ class _ViewPagerFragmentStylePageState extends State<ViewPagerFragmentStylePage>
                               color: Colors.black,
                             ),
                             onPressed: () {
-                              ScaffoldMessenger.of(context).showSnackBar(
-                                const SnackBar(
-                                  content: Text('Belum ada notifikasi 😴'),
-                                ),
-                              );
+                              setState(() {
+                                Navigator.push(
+                                  context,
+                                  MaterialPageRoute(
+                                    builder: (context) => NotificationApp(),
+                                  ),
+                                );
+                              });
                             },
                           ),
                         if (_selectedIndex == 1)
@@ -149,13 +235,7 @@ class _ViewPagerFragmentStylePageState extends State<ViewPagerFragmentStylePage>
                                   color: Colors.black,
                                 ),
                                 onPressed: () {
-                                  ScaffoldMessenger.of(context).showSnackBar(
-                                    const SnackBar(
-                                      content: Text(
-                                        'Tambah chat belum dibuat 😄',
-                                      ),
-                                    ),
-                                  );
+                                  showModernInputSheet();
                                 },
                               ),
                               IconButton(

@@ -1,5 +1,4 @@
 import 'package:flutter/material.dart';
-import 'package:intl/intl.dart';
 import 'package:kamdig/OpenArticel.dart';
 import 'package:kamdig/model/NewsModel.dart';
 import 'package:shimmer/shimmer.dart';
@@ -137,7 +136,7 @@ class _NewsWidgetState extends State<NewsWidget> {
         print('Tapped on: ${item.title}');
         Navigator.push(
           context,
-          MaterialPageRoute(builder: (context) => OpenArticle()),
+          MaterialPageRoute(builder: (context) => OpenArticlePage(id: item.id)),
         );
       },
       child: Container(

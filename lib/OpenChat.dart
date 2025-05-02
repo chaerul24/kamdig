@@ -1,12 +1,11 @@
 import 'package:flutter/material.dart';
-import 'package:kamdig/main2.dart';
 
 void main() {
-  runApp(const OpenchatPageView());
+  runApp(OpenchatPageView());
 }
 
 class OpenchatPageView extends StatelessWidget {
-  const OpenchatPageView({super.key});
+  OpenchatPageView({super.key});
 
   @override
   Widget build(BuildContext context) {

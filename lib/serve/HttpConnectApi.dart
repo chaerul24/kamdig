@@ -13,7 +13,7 @@ class Httpconnectapi {
     if (response.statusCode == 200) {
       return jsonDecode(response.body);
     } else {
-      throw Exception('Gagal load data');
+      print('Error: ${response.statusCode}');
     }
   }
 
@@ -78,5 +78,12 @@ class Httpconnectapi {
     return data.entries.map((entry) {
       return NewsModel.fromJson(entry.key, entry.value);
     }).toList();
+  }
+
+  Future<NewsModel> openArticle(String id) {
+    return getData('api/v1/news/$id').then((rawData) {
+      final Map<String, dynamic> data = rawData['data'];
+      return NewsModel.fromJson(id, data);
+    });
   }
 }

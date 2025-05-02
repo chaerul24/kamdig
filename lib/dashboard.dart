@@ -2,6 +2,8 @@ import 'package:flutter/material.dart';
 import 'package:flutter_image_slideshow/flutter_image_slideshow.dart';
 import 'package:intl/intl.dart';
 import 'package:intl/date_symbol_data_local.dart';
+import 'package:kamdig/Balance.dart';
+import 'package:kamdig/Works.dart';
 import 'package:kamdig/news.dart';
 
 Future<void> main() async {
@@ -145,9 +147,24 @@ class _DashboardPageState extends State<DashboardPage> {
                     final item = data[index];
                     return GestureDetector(
                       onTap: () {
-                        ScaffoldMessenger.of(context).showSnackBar(
-                          SnackBar(content: Text('${item['title']} diklik')),
-                        );
+                        setState(() {
+                          if (item['title'] == "Bangunan") {
+                            Navigator.push(
+                              context,
+                              MaterialPageRoute(
+                                builder: (context) => const WorksApp(),
+                              ),
+                            );
+                          }
+                          if (item['title'] == "Dompet") {
+                            Navigator.push(
+                              context,
+                              MaterialPageRoute(
+                                builder: (context) => BalanceApp(),
+                              ),
+                            );
+                          }
+                        });
                       },
                       child: Container(
                         decoration: BoxDecoration(
