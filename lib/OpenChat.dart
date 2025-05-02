@@ -5,7 +5,7 @@ void main() {
 }
 
 class OpenchatPageView extends StatelessWidget {
-  OpenchatPageView({super.key});
+  const OpenchatPageView({super.key});
 
   @override
   Widget build(BuildContext context) {

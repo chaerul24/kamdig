@@ -7,7 +7,7 @@ void main() {
 }
 
 class BalanceApp extends StatelessWidget {
-  BalanceApp({Key? key}) : super(key: key);
+  BalanceApp({super.key});
 
   final List<Map<String, dynamic>> transactionList = [
     {"balance": 1000000, "owner": "Chaerul", "date": "2023-10-01"},
@@ -96,7 +96,11 @@ class BalanceApp extends StatelessWidget {
                       mainAxisAlignment: MainAxisAlignment.center,
                       children: [
                         Text(
-                          '${NumberFormat.currency(locale: 'id_ID', symbol: 'Rp', decimalDigits: 0).format(transactionList[0]["balance"])}',
+                          NumberFormat.currency(
+                            locale: 'id_ID',
+                            symbol: 'Rp',
+                            decimalDigits: 0,
+                          ).format(transactionList[0]["balance"]),
                           style: const TextStyle(
                             color: Colors.white,
                             fontSize: 25,

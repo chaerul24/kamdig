@@ -51,7 +51,7 @@ class _OpenArticlePageState extends State<OpenArticlePage> {
   }; // Data artikel yang akan ditampilkan
 
   late Future<NewsModel> newsFuture;
-  Httpconnectapi _httpConnectApi =
+  final Httpconnectapi _httpConnectApi =
       Httpconnectapi(); // Inisialisasi Httpconnectapi
   late bool isLoading = false; // Menyimpan status loading
 

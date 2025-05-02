@@ -5,7 +5,7 @@ void main() {
 }
 
 class WorksApp extends StatelessWidget {
-  const WorksApp({Key? key}) : super(key: key);
+  const WorksApp({super.key});
 
   @override
   Widget build(BuildContext context) {

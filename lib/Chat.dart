@@ -40,7 +40,7 @@ class ChatPage extends StatefulWidget {
 class _ChatPageState extends State<ChatPage> {
   final TextEditingController _searchController = TextEditingController();
 
-  List<Map<String, dynamic>> _chatList = [
+  final List<Map<String, dynamic>> _chatList = [
     {
       'username': 'Chaerul',
       'message': 'Halo, apa kabar?',
