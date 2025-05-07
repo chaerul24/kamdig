@@ -10,12 +10,12 @@
 
 Berikut adalah demo singkat dari aplikasi KAMDIG:
 
-[![Tonton Video](https://img.youtube.com/vi/VIDEO_ID_HERE/0.jpg)](video/video1.mp4)
+[![Tonton Video](video/gambar1.png)](video/video1.mp4)
 
 > Jika video tidak dapat diputar langsung, silakan unduh atau buka secara manual melalui folder `video/video1.mp4`.
 
 <video width="100%" controls>
-  <source src="video/video1.mp4" type="video/mp4">
+  <source src="./video/video1.mp4" type="video/mp4">
   Browser Anda tidak mendukung tag video.
 </video>
 
