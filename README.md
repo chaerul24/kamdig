@@ -4,6 +4,21 @@
 ## ✨ Tentang Aplikasi
 
 **KAMDIG (Kampung Digital)** adalah aplikasi mobile berbasis Flutter yang mempermudah warga desa dalam mengakses informasi, layanan darurat, berita, dan berbagai kebutuhan komunitas secara digital. Dirancang dengan antarmuka yang ramah pengguna, Kamdig menghubungkan teknologi dengan kebutuhan masyarakat desa.
+---
+
+## 🎥 Demo Video
+
+Berikut adalah demo singkat dari aplikasi KAMDIG:
+
+[![Tonton Video](https://img.youtube.com/vi/VIDEO_ID_HERE/0.jpg)](video/video1.mp4)
+
+> Jika video tidak dapat diputar langsung, silakan unduh atau buka secara manual melalui folder `video/video1.mp4`.
+
+<video width="100%" controls>
+  <source src="video/video1.mp4" type="video/mp4">
+  Browser Anda tidak mendukung tag video.
+</video>
+
 
 ---
 
