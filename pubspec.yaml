@@ -41,6 +41,9 @@ dependencies:
   flutter_html: ^3.0.0
   wakelock_plus: ^1.1.1
   flutter_tts: ^4.2.2
+  curved_navigation_bar: ^1.0.6
+  equatable: ^2.0.7
+  flutter_secure_storage: ^9.2.4
 
 dev_dependencies:
   flutter_test:
@@ -81,6 +84,10 @@ flutter:
     - assets/images/ic_wallet_black.png
     - assets/images/ktp.png
     - assets/images/disconnected.png
+    - assets/images/masjid.png
+    - assets/images/road.png
+    - assets/images/lingkungan.png
+    - assets/images/wisata.png
 
   # An image asset can refer to one or more resolution-specific "variants", see
   # https://flutter.dev/to/resolution-aware-images

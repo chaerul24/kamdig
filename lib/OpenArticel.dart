@@ -118,12 +118,6 @@ class _OpenArticlePageState extends State<OpenArticlePage> {
           });
         }
       } catch (e) {
-        ScaffoldMessenger.of(context).showSnackBar(
-          SnackBar(
-            content: Text('Jaringan bermasalah'),
-            backgroundColor: Colors.red,
-          ),
-        );
         setState(() {
           isLoading =
               false; // Set loading menjadi false jika terjadi error jaringan

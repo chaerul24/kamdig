@@ -1,11 +1,13 @@
 import 'package:flutter/material.dart';
+import 'package:kamdig/serve/HttpConnectApi.dart';
 
 void main() {
   runApp(OpenchatPageView());
 }
 
 class OpenchatPageView extends StatelessWidget {
-  const OpenchatPageView({super.key});
+  final String? email;
+  const OpenchatPageView({super.key, this.email});
 
   @override
   Widget build(BuildContext context) {
@@ -26,6 +28,7 @@ class OpenchatPage extends StatefulWidget {
 }
 
 class OpenchatPageState extends State<OpenchatPage> {
+  Httpconnectapi httpConnectApi = Httpconnectapi();
   final List<Map<String, dynamic>> messages = const [
     {
       'sender': 'james@gmail.com',

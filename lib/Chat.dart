@@ -1,11 +1,6 @@
 import 'package:flutter/material.dart';
-import 'package:flutter_image_slideshow/flutter_image_slideshow.dart';
-import 'package:intl/intl.dart';
 import 'package:intl/date_symbol_data_local.dart';
-import 'package:kamdig/Balance.dart';
 import 'package:kamdig/OpenChat.dart';
-import 'package:kamdig/Works.dart';
-import 'package:kamdig/news.dart';
 
 Future<void> main() async {
   WidgetsFlutterBinding.ensureInitialized();

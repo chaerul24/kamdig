@@ -3,6 +3,7 @@ import 'package:flutter_image_slideshow/flutter_image_slideshow.dart';
 import 'package:intl/intl.dart';
 import 'package:intl/date_symbol_data_local.dart';
 import 'package:kamdig/Balance.dart';
+import 'package:kamdig/Bansos.dart';
 import 'package:kamdig/Works.dart';
 import 'package:kamdig/news.dart';
 
@@ -43,6 +44,10 @@ class _DashboardPageState extends State<DashboardPage> {
     _scrollController.dispose(); // selalu dibuang yaa biar ga bocor
     super.dispose();
   }
+
+  String selectedFilter = 'Berita';
+
+  final List<String> filterOptions = ['Berita', 'Bencana', 'Wisata'];
 
   @override
   Widget build(BuildContext context) {
@@ -152,7 +157,7 @@ class _DashboardPageState extends State<DashboardPage> {
                             Navigator.push(
                               context,
                               MaterialPageRoute(
-                                builder: (context) => const WorksApp(),
+                                builder: (context) => WorksApp(),
                               ),
                             );
                           }
@@ -161,6 +166,14 @@ class _DashboardPageState extends State<DashboardPage> {
                               context,
                               MaterialPageRoute(
                                 builder: (context) => BalanceApp(),
+                              ),
+                            );
+                          }
+                          if (item['title'] == "Bansos") {
+                            Navigator.push(
+                              context,
+                              MaterialPageRoute(
+                                builder: (context) => BansosApp(),
                               ),
                             );
                           }
@@ -297,7 +310,59 @@ class _DashboardPageState extends State<DashboardPage> {
                         );
                       }).toList(),
                 ),
-                NewsWidget(),
+
+                SizedBox(height: 20),
+
+                SingleChildScrollView(
+                  scrollDirection: Axis.horizontal,
+                  padding: const EdgeInsets.symmetric(horizontal: 0),
+                  child: Row(
+                    children:
+                        filterOptions.map((option) {
+                          final bool isSelected = selectedFilter == option;
+                          return Padding(
+                            padding: const EdgeInsets.only(right: 8),
+                            child: ChoiceChip(
+                              label: Row(
+                                mainAxisSize: MainAxisSize.min,
+                                children: [
+                                  if (isSelected) const SizedBox(width: 4),
+                                  Text(option),
+                                ],
+                              ),
+                              selected: isSelected,
+                              onSelected: (_) {
+                                setState(() {
+                                  selectedFilter =
+                                      option; // Update the selected filter
+                                  print('Selected Filter: $selectedFilter');
+                                });
+                              },
+                              selectedColor: Colors.blue,
+                              backgroundColor: Colors.grey[300],
+                              labelStyle: TextStyle(
+                                color: isSelected ? Colors.white : Colors.black,
+                              ),
+                            ),
+                          );
+                        }).toList(),
+                  ),
+                ),
+
+                const SizedBox(height: 20),
+
+                if (selectedFilter == 'Berita')
+                  const Column(children: [NewsWidget()])
+                else if (selectedFilter == 'Bencana')
+                  const SizedBox(
+                    height: 100,
+                    child: Center(child: Text('Belum ada')),
+                  )
+                else if (selectedFilter == 'Wisata')
+                  const SizedBox(
+                    height: 100,
+                    child: Center(child: Text('Belum ada')),
+                  ),
               ],
             ),
           ),

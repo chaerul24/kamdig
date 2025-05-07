@@ -4,6 +4,7 @@ import 'package:kamdig/Chat.dart';
 import 'package:kamdig/Notification.dart';
 import 'package:kamdig/Profile.dart';
 import 'package:kamdig/dashboard.dart';
+import 'package:curved_navigation_bar/curved_navigation_bar.dart';
 
 ///
 Future<void> main() async {
@@ -128,7 +129,7 @@ class _ViewPagerFragmentStylePageState extends State<ViewPagerFragmentStylePage>
       _selectedIndex = index;
       _pageController.animateToPage(
         index,
-        duration: const Duration(milliseconds: 500),
+        duration: Duration(milliseconds: 300),
         curve: Curves.easeInOut,
       );
     });
@@ -277,23 +278,36 @@ class _ViewPagerFragmentStylePageState extends State<ViewPagerFragmentStylePage>
         onPageChanged: (index) {
           setState(() {
             _selectedIndex = index;
-            // Trigger the animation only when the selected page changes
-            if (_selectedIndex == 2) {
-              _animationController.forward();
-            } else {
-              _animationController.reverse();
-            }
           });
         },
       ),
-      bottomNavigationBar: BottomNavigationBar(
-        currentIndex: _selectedIndex,
-        onTap: _onItemTapped,
-        items: const [
-          BottomNavigationBarItem(icon: Icon(Icons.home), label: 'Home'),
-          BottomNavigationBarItem(icon: Icon(Icons.message), label: 'Chat'),
-          BottomNavigationBarItem(icon: Icon(Icons.person), label: 'Profile'),
+      bottomNavigationBar: CurvedNavigationBar(
+        index: _selectedIndex,
+        height: 60.0,
+        items: <Widget>[
+          Icon(
+            Icons.home,
+            size: 30,
+            color: _selectedIndex == 0 ? Colors.white : Colors.white60,
+          ),
+          Icon(
+            Icons.message,
+            size: 30,
+            color: _selectedIndex == 1 ? Colors.white : Colors.white60,
+          ),
+          Icon(
+            Icons.person,
+            size: 30,
+            color: _selectedIndex == 2 ? Colors.white : Colors.white60,
+          ),
         ],
+        onTap: (index) {
+          _onItemTapped(index);
+        },
+        backgroundColor: Colors.white,
+        color: Colors.blueAccent,
+        animationCurve: Curves.easeInOut,
+        animationDuration: Duration(milliseconds: 300),
       ),
     );
   }

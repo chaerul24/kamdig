@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:kamdig/ViewPagerFragmentStylePage.dart';
 import 'package:kamdig/register.dart';
 import 'package:kamdig/serve/HttpConnectApi.dart';
+import 'package:flutter_secure_storage/flutter_secure_storage.dart';
 
 void main() {
   runApp(const LoginApp());
@@ -32,6 +33,7 @@ class _LoginPageState extends State<LoginPage> {
   final usernameController = TextEditingController();
   final passwordController = TextEditingController();
   final Httpconnectapi _httpConnectApi = Httpconnectapi();
+  final storage = FlutterSecureStorage();
 
   bool isLoading = false;
 
@@ -53,6 +55,14 @@ class _LoginPageState extends State<LoginPage> {
         final user = response['user'];
         print('JWT Token: $token');
         print('User: $user');
+
+        var check = await _httpConnectApi.saveToken(token);
+        if (check) {
+          print('Token saved successfully');
+        } else {
+          print('Failed to save token');
+        }
+
         ScaffoldMessenger.of(context).showSnackBar(
           SnackBar(
             content: Text('Login berhasil!'),
@@ -67,8 +77,8 @@ class _LoginPageState extends State<LoginPage> {
           ),
         );
       } else {
-        // Jika ada error dari server, tampilkan pesan error
-        print('Error Response: ${response['message']}'); // Log error response
+        // If there's an error, show the error message
+        print('Error Response: ${response['message']}');
         ScaffoldMessenger.of(context).showSnackBar(
           SnackBar(
             content: Text(response['message'] ?? 'Login gagal'),
@@ -78,7 +88,7 @@ class _LoginPageState extends State<LoginPage> {
       }
     } catch (e) {
       setState(() => isLoading = false);
-      print('Error during POST request: $e'); // Log error detail di sini
+      print('Error during POST request: $e');
       ScaffoldMessenger.of(context).showSnackBar(
         SnackBar(
           content: Text('Terjadi kesalahan: ${e.toString()}'),

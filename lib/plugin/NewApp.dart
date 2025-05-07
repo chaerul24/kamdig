@@ -1,23 +1,24 @@
 import 'package:flutter/material.dart';
 import 'package:kamdig/OpenArticel.dart';
 import 'package:kamdig/model/NewsModel.dart';
+import 'package:kamdig/serve/HttpConnectApi.dart';
 import 'package:shimmer/shimmer.dart';
-import 'serve/HttpConnectApi.dart';
 import 'package:intl/date_symbol_data_local.dart';
 
 void main() async {
   WidgetsFlutterBinding.ensureInitialized(); // penting buat init async
   await initializeDateFormatting('id_ID', null); // ini kunci utamanya
-  runApp(NewsWidget());
+  runApp(NewsApp(category: 'Berita'));
 }
 
-class NewsWidget extends StatefulWidget {
-  const NewsWidget({super.key});
+class NewsApp extends StatefulWidget {
+  final String category;
+  const NewsApp({super.key, required this.category});
   @override
-  State<NewsWidget> createState() => _NewsWidgetState();
+  State<NewsApp> createState() => _NewsAppState();
 }
 
-class _NewsWidgetState extends State<NewsWidget> {
+class _NewsAppState extends State<NewsApp> {
   late Future<List<NewsModel>> newsFuture;
 
   @override
@@ -50,7 +51,7 @@ class _NewsWidgetState extends State<NewsWidget> {
               itemCount: newsList.length,
               gridDelegate: const SliverGridDelegateWithFixedCrossAxisCount(
                 crossAxisCount: 1,
-                mainAxisSpacing: 30,
+                mainAxisSpacing: 20,
                 childAspectRatio: 3,
               ),
               itemBuilder: (context, index) {
@@ -58,6 +59,7 @@ class _NewsWidgetState extends State<NewsWidget> {
                 return newsCard(item);
               },
             ),
+            const SizedBox(height: 20),
           ],
         );
       },
@@ -108,6 +110,7 @@ class _NewsWidgetState extends State<NewsWidget> {
             );
           },
         ),
+        SizedBox(height: 20),
       ],
     );
   }
